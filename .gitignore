@@ -1,0 +1,116 @@
+# --- Secrets and local configuration -----------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*.token
+credentials.json
+secrets.json
+
+# Local-only/private workspace. Real company templates, prompts, source data,
+# screenshots and generated outputs belong here and MUST NOT be committed.
+.local/
+private/
+.local-private/
+
+# Generated artifacts and run/session state
+artifacts/
+output/
+outputs/
+runs/
+run-data/
+sessions/
+logs/
+*.log
+
+# Local presentation templates / proprietary assets
+local-templates/
+company-templates/
+private-templates/
+
+# Temporary files
+tmp/
+temp/
+.cache/
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# --- Node / TypeScript -------------------------------------------------------
+node_modules/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+.npm/
+.npmrc.local
+coverage/
+.nyc_output/
+dist/
+build/
+out/
+*.tsbuildinfo
+.eslintcache
+.vite/
+.next/
+.turbo/
+.parcel-cache/
+
+# Package-manager/debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+env/
+.python-version
+
+# --- Rust / native experiments ----------------------------------------------
+target/
+
+# --- IDE / editor ------------------------------------------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+*.code-workspace
+
+# --- OS ----------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Test/render tool caches -------------------------------------------------
+playwright-report/
+test-results/
+blob-report/
+allure-results/
+
+# LibreOffice / Office lock files
+~$*.pptx
+~$*.docx
+~$*.xlsx
+
+# NOTE:
+# Do not blanket-ignore *.pptx/*.pdf/*.png because synthetic/open test fixtures
+# may legitimately be versioned. Put confidential or generated material under
+# .local/, private/ or artifacts/ instead.
