@@ -4,7 +4,7 @@ Matt skills がコードを調べるときに、このリポジトリのドメ�
 
 ## 調べる前に読むもの
 
-- ルートの `CONTEXT.md`（用語集）
+- ルートの `GLOSSARY.md`（用語集）。Matt skills は v1.3.0 で `CONTEXT.md` を `GLOSSARY.md` に改名した。`CONTEXT.md` は作らない
 - `docs/adr/` のうち、これから作業する領域に関わる ADR
 
 どちらかが無くても、無いことを指摘せず、先に作ることも提案しない。`/domain-modeling`（`/grill-with-docs` と `/improve-codebase-architecture` から呼ばれる）が、用語や判断が実際に決まった時点で作る。
@@ -15,7 +15,7 @@ Matt skills がコードを調べるときに、このリポジトリのドメ�
 
 ```
 /
-├── CONTEXT.md
+├── GLOSSARY.md
 └── docs/adr/
     ├── 0001-base-harness.md
     └── 0002-change-management.md
@@ -25,7 +25,7 @@ ADR の書き方と番号の付け方は #11 で決める。
 
 ## 用語集の語を使う
 
-Issue のタイトル、リファクタの提案、仮説、テスト名などでドメインの概念を書くときは、`CONTEXT.md` の定義どおりの語を使う。用語集が避けると決めた同義語は使わない。
+Issue のタイトル、リファクタの提案、仮説、テスト名などでドメインの概念を書くときは、`GLOSSARY.md` の定義どおりの語を使う。用語集が避けると決めた同義語は使わない。
 
 必要な概念が用語集に無いなら、プロジェクトで使っていない語を作っているか（考え直す）、用語集に本当に抜けがあるか（`/domain-modeling` に回す）のどちらかである。
 

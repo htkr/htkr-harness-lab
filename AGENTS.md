@@ -1,5 +1,11 @@
 # AGENTS.md
 
+## 作業の規約
+
+- 実装の入口は pstack に統一する。Matt skills の `implement` と `implement-spec` では実装しない。
+- 自律実行中はチャットで質問しない。人間の判断が要ることは判断チケットにし、今の Issue の範囲の外で見つけた作業は `needs-triage` の Issue にする。
+- `main` に直接 push しない。作業はブランチと PR で行う。
+
 ## 自走時に取る Issue の順
 
 人間がその場で応答しない実行（自律実行）では、次の順で Issue を1件ずつ取る。
@@ -23,4 +29,4 @@ triage のラベルは既定の名前（`needs-triage`、`ready-for-agent` な�
 
 ### Domain docs
 
-単一コンテキスト。用語集はルートの `CONTEXT.md`、ADR は `docs/adr/` に置く。`docs/agents/domain.md` を参照。
+単一コンテキスト。用語集はルートの `GLOSSARY.md`、ADR は `docs/adr/` に置く。`docs/agents/domain.md` を参照。
