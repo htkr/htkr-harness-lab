@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "deny": [
+      "Skill(mattpocock-skills:implement)",
+      "Skill(mattpocock-skills:implement-spec)"
+    ]
+  },
+  "enabledPlugins": {
+    "pstack@pstack-claude": true,
+    "mattpocock-skills@mattpocock": true,
+    "mattpocock-skills@claude-plugins-official": false
+  },
+  "extraKnownMarketplaces": {
+    "pstack-claude": {
+      "source": {
+        "source": "github",
+        "repo": "michael-denyer/pstack-claude",
+        "ref": "v0.9.80"
+      }
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills",
+        "ref": "v1.3.1"
+      }
+    }
+  }
+}
