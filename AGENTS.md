@@ -5,6 +5,7 @@
 - 実装の入口は pstack に統一する。Matt skills の `implement` と `implement-spec` では実装しない。
 - 自律実行中はチャットで質問しない。人間の判断が要ることは判断チケットにし、今の Issue の範囲の外で見つけた作業は `needs-triage` の Issue にする。
 - `main` に直接 push しない。作業はブランチと PR で行う。
+- Issue と PR の本文、それらへのコメントは、リポジトリの `i-have-adhd` スキルに従って日本語で書く。本文はファイルに書き、`gh` に `--body-file` で渡す。
 
 ## 自走時に取る Issue の順
 

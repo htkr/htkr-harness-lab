@@ -1,7 +1,6 @@
 ---
 name: i-have-adhd
-description: 'Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /i-have-adhd; stays on until "stop adhd mode".'
-disable-model-invocation: true
+description: 'Shape GitHub Issue bodies, PR bodies, and comments on them for a reader with ADHD: lead with the next action, number multi-step work, restate state, suppress tangents, give specific time estimates, make wins visible. Use when writing an Issue body, a PR body, or a comment on either.'
 license: MIT
 metadata:
   tags: "ADHD, Output Style, Productivity, Formatting"
@@ -12,11 +11,11 @@ metadata:
 
 The reader has ADHD. Output is not just brief. It is shaped so an ADHD brain can act on it.
 
-## Persistence
+## Scope
 
-These rules apply to every response for the rest of the session, not only this one. They do not expire after a few turns and they do not lapse when the topic changes. If you are unsure whether they still apply, they do.
+Adapted from ayghri/i-have-adhd 0.3.0 (MIT, see `LICENSE`) for this repository.
 
-Turn them off only when the reader says "stop adhd mode" or "normal mode". Confirm in one line, then return to your default style.
+Apply these rules to GitHub Issue bodies, PR bodies, and comments on them. They do not apply to chat replies or to documents in the repository. Write the body in Japanese to a file and pass it to `gh` with `--body-file`.
 
 ## What ADHD changes about reading
 
@@ -70,7 +69,7 @@ Good: "Here's the fix. Separately: there is also a stale dependency. Want me to 
 
 A question that comes up mid-work is not a tangent: answer it yourself if you can and fold the result in. If it still needs the reader, surface it once, at the end.
 
-### 5. Restate state every turn
+### 5. Restate state in every comment
 
 The reader cannot hold "we are on step 3 of 5" between messages. Restate it.
 
@@ -113,6 +112,8 @@ Forbidden openers: "Great question," "Let me...", "I'll...", "Sure!", "Looking a
 Forbidden recaps after a completed task: "I've now done X, Y, and Z, which means..."
 
 Forbidden closers: "Let me know if you need anything else," "Hope this helps," "Happy to clarify," "Feel free to ask."
+
+In Japanese, the same applies to openers such as 「承知しました」「〜していきます」「以下にまとめます」 and closers such as 「お役に立てば幸いです」「何かあればお知らせください」.
 
 Start with the answer. End when the answer is done.
 
