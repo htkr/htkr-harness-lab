@@ -1,31 +1,31 @@
-# Security and public-repository safety
+# セキュリティと公開リポジトリでの情報管理
 
-This repository is public and is intended to be cloned into environments that may contain non-public company data.
+このリポジトリは公開されており、非公開の会社データを含む環境にクローンされることを想定しています。
 
-## Never commit
+## コミットしてはいけないもの
 
-- API keys, access tokens, cookies, credentials, certificates or private keys
-- internal hostnames, private repository URLs or confidential ticket/document links
-- proprietary PowerPoint templates, brand assets or screenshots
-- customer/company source data or generated material derived from it
-- prompts, run logs, traces or session state containing confidential content
+- APIキー、アクセストークン、Cookie、認証情報、証明書、秘密鍵
+- 社内ホスト名、非公開リポジトリのURL、機密のチケット・文書へのリンク
+- 独自のPowerPointテンプレート、ブランド素材、スクリーンショット
+- 顧客・会社の元データ、またはそこから生成した資料
+- 機密情報を含むプロンプト、実行ログ、トレース、セッション状態
 
-Use ignored local directories such as `.local/`, `private/` and `artifacts/` for non-public runtime inputs and outputs.
+非公開の実行時入力・出力には、`.local/`、`private/`、`artifacts/` などのGit管理対象外のローカルディレクトリを使ってください。
 
-## If a secret is committed
+## 秘密情報をコミットした場合
 
-1. **Rotate or revoke it immediately.** Assume it is compromised once pushed to a public repository.
-2. Remove the secret from the current tree.
-3. Clean Git history when appropriate; deleting it in a later commit does not remove it from previous commits.
-4. Check forks, caches, CI logs and generated artifacts that may also contain the value.
-5. Review nearby files/logs for related confidential information.
+1. **直ちにローテーションまたは無効化してください。** 公開リポジトリにプッシュした時点で漏えいしたものとして扱います。
+2. 現在のファイル群から秘密情報を除去します。
+3. 必要に応じてGitの履歴を整理します。後続のコミットで削除しても、過去のコミットからは消えません。
+4. 同じ値がfork、キャッシュ、CIログ、生成物にも含まれていないか確認します。
+5. 周辺のファイルやログに関連する機密情報がないか確認します。
 
-## Reporting a vulnerability
+## 脆弱性の報告
 
-Do not post real credentials, confidential company data or exploit details containing secrets in a public GitHub Issue.
+実際の認証情報、機密の会社データ、秘密情報を含む攻撃手順を公開GitHub Issueに投稿しないでください。
 
-For ordinary bugs that do not expose sensitive information, use GitHub Issues. For sensitive security reports, use GitHub's private vulnerability reporting/security-advisory mechanism if it is enabled for this repository, or contact the repository owner privately.
+機密情報を露出しない通常のバグはGitHub Issueで報告してください。機密性の高いセキュリティ報告には、このリポジトリで有効な場合はGitHubの非公開脆弱性報告・セキュリティアドバイザリの仕組みを使い、それができない場合はリポジトリ所有者に非公開で連絡してください。
 
-## Agent/tooling rule
+## エージェントとツールの規則
 
-The harness must treat local company material as runtime input, not repository content. Tool logs and telemetry should redact secrets and should default to local/ignored storage unless explicitly configured otherwise.
+ハーネスはローカルの会社資料をリポジトリの内容ではなく実行時入力として扱う必要があります。ツールのログとテレメトリでは秘密情報を伏せ、明示的に別の設定をしない限り、Git管理対象外のローカル領域に保存してください。

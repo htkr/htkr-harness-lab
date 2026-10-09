@@ -1,4 +1,4 @@
-# --- Secrets and local configuration -----------------------------------------
+# --- 秘密情報とローカル設定 -----------------------------------------
 .env
 .env.*
 !.env.example
@@ -12,13 +12,13 @@
 credentials.json
 secrets.json
 
-# Local-only/private workspace. Real company templates, prompts, source data,
-# screenshots and generated outputs belong here and MUST NOT be committed.
+# ローカル専用・非公開の作業領域。実際の会社のテンプレート、プロンプト、元データ、
+# スクリーンショット、生成物はここに置き、コミットしないこと。
 .local/
 private/
 .local-private/
 
-# Generated artifacts and run/session state
+# 生成物と実行・セッション状態
 artifacts/
 output/
 outputs/
@@ -28,12 +28,12 @@ sessions/
 logs/
 *.log
 
-# Local presentation templates / proprietary assets
+# ローカルのプレゼンテーション用テンプレート・独自素材
 local-templates/
 company-templates/
 private-templates/
 
-# Temporary files
+# 一時ファイル
 tmp/
 temp/
 .cache/
@@ -62,7 +62,7 @@ out/
 .turbo/
 .parcel-cache/
 
-# Package-manager/debug logs
+# パッケージマネージャー・デバッグ用ログ
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -84,10 +84,10 @@ venv/
 env/
 .python-version
 
-# --- Rust / native experiments ----------------------------------------------
+# --- Rust / ネイティブ実装の実験 ----------------------------------------------
 target/
 
-# --- IDE / editor ------------------------------------------------------------
+# --- IDE / エディター ------------------------------------------------------------
 .idea/
 .vscode/*
 !.vscode/extensions.json
@@ -99,18 +99,18 @@ target/
 Thumbs.db
 Desktop.ini
 
-# --- Test/render tool caches -------------------------------------------------
+# --- テスト・レンダリングツールのキャッシュ -------------------------------------------------
 playwright-report/
 test-results/
 blob-report/
 allure-results/
 
-# LibreOffice / Office lock files
+# LibreOffice / Officeのロックファイル
 ~$*.pptx
 ~$*.docx
 ~$*.xlsx
 
-# NOTE:
-# Do not blanket-ignore *.pptx/*.pdf/*.png because synthetic/open test fixtures
-# may legitimately be versioned. Put confidential or generated material under
-# .local/, private/ or artifacts/ instead.
+# 注意：
+# 架空または公開可能なテスト用素材はGitで管理する場合があるため、
+# *.pptx/*.pdf/*.png を一律に除外しない。機密資料や生成物は
+# .local/、private/、artifacts/ に置く。

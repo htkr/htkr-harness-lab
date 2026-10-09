@@ -1,25 +1,25 @@
-# Third-party notices and provenance
+# 外部コンポーネントの告知と出自
 
-This file tracks external projects whose code, skills, templates or other material are copied or vendored into this repository.
+このファイルには、このリポジトリにコピーまたは取り込んだ外部プロジェクトのコード、スキル、テンプレートなどを記録します。
 
-Merely depending on or linking to a package does not imply that its full license text must be copied here; follow the upstream license requirements for the actual usage mode.
+パッケージに依存したりリンクを張ったりするだけで、そのライセンス全文を必ずここにコピーする必要があるわけではありません。実際の利用方法に応じて、元プロジェクトのライセンス要件に従ってください。
 
-## Policy
+## 方針
 
-Before copying or vendoring third-party material, record:
+外部の資料をコピーまたは取り込む前に、次を記録します。
 
-- upstream project and repository
-- exact version, tag or commit
-- files/directories incorporated
-- usage mode: dependency, reference, vendor, adaptation or reimplementation
-- upstream license
-- required attribution/notices
-- local modifications, if any
+- 元プロジェクトとリポジトリ
+- 正確なバージョン、タグ、コミット
+- 取り込むファイル・ディレクトリ
+- 利用方法：依存関係、参照、取り込み、改変、再実装
+- 元プロジェクトのライセンス
+- 必要な帰属表示・告知
+- ローカルでの変更内容（ある場合）
 
-Do not copy material whose license or provenance is unclear.
+ライセンスや出自が不明な資料はコピーしないでください。
 
-## Current vendored components
+## 現在取り込んでいるコンポーネント
 
-None.
+ありません。
 
-The project is currently evaluating/referencing projects including Pi, Oh My Pi, DeepSeek Harness, Matt Pocock skills, pstack and presentation-generation libraries. Evaluation/reference alone does not mean their source code has been incorporated into this repository.
+現在はPi、Oh My Pi、DeepSeek Harness、Matt Pocock skills、pstack、プレゼンテーション生成ライブラリなどを評価・参照しています。評価・参照しているだけでは、それらのソースコードをこのリポジトリに取り込んだことにはなりません。

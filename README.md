@@ -1,168 +1,168 @@
 # htkr-harness-lab
 
-Experimental agent-harness lab for two workflows built on a shared runtime:
+共通の実行基盤を使う、次の2つのワークフローを試すためのエージェントハーネス実験リポジトリです。
 
-1. **Slides profile** — research -> evidence -> HTML prototype -> explicit human approval -> editable PPTX.
-2. **Coding profile** — requirements/issues -> implementation -> verification -> independent review -> PR.
+1. **スライドプロファイル** — 調査 → 根拠整理 → HTML試作 → 利用者の明示的な承認 → 編集可能なPPTX。
+2. **コーディングプロファイル** — 要件・Issue → 実装 → 検証 → 独立レビュー → PR。
 
-The target model providers are **Anthropic Claude API** and **OpenAI API**. The base harness is intentionally undecided at project start; the first spike compares **Pi** and **DeepSeek Harness**, with **Oh My Pi** kept as a coding-focused reference/optional profile.
+対象のモデルプロバイダーは **Anthropic Claude API** と **OpenAI API** です。基盤となるハーネスは開始時点では未決定で、最初の比較検証で **Pi** と **DeepSeek Harness** を比べます。**Oh My Pi** はコーディング向けの参考実装・任意のプロファイルとして扱います。
 
 > [!WARNING]
-> This repository is **public**. Do not commit company names, internal URLs, credentials, proprietary PowerPoint templates, confidential prompts, production data, screenshots, generated decks based on internal data, or other non-public material.
+> このリポジトリは**公開**されています。会社名、社内URL、認証情報、独自のPowerPointテンプレート、機密プロンプト、本番データ、スクリーンショット、社内データから生成した資料など、非公開情報をコミットしないでください。
 
-## Design goals
+## 設計目標
 
-- **Small core, separate profiles.** Share model routing, sessions, tools, compaction and telemetry; keep slides and coding workflow logic separate.
-- **Provider-portable.** Workflows should select logical model roles such as `fast`, `reasoning` and `review`, not hard-code vendor model IDs everywhere.
-- **Human gates where they matter.** Slides require approval before PPTX generation; protected SSOT changes require human-controlled PR approval.
-- **Fast by default, traceable when factual.** The slides path prioritizes time-to-first-prototype while retaining claim/source traceability for web-researched facts.
-- **Minimal governance.** Prefer GitHub-native enforcement (PRs, CODEOWNERS, rulesets) over custom local security mechanisms.
-- **Measure changes.** Prompts, skills, orchestration, compaction and model choices should be compared with repeatable benchmarks.
+- **小さな共通基盤と分離したプロファイル。** モデルの振り分け、セッション、ツール、コンパクション、テレメトリは共有し、スライドとコーディングの処理は分離します。
+- **プロバイダー間で移植可能。** ワークフローではベンダー固有のモデルIDを各所に埋め込まず、`fast`、`reasoning`、`review` などの論理的な役割を指定します。
+- **必要な箇所に人の承認を設ける。** スライドのPPTX生成前には承認を必須にし、保護対象のSSOT変更には人が管理するPR承認を求めます。
+- **通常は速く、事実には追跡可能性を持たせる。** スライド作成では最初の試作までの時間を重視しつつ、ウェブ調査に基づく主張と出典の対応を保持します。
+- **管理の仕組みは最小限にする。** 独自のローカルセキュリティ機構より、PR、CODEOWNERS、ルールセットなどGitHub標準の仕組みを優先します。
+- **変更を測定する。** プロンプト、スキル、オーケストレーション、コンパクション、モデル選択を再実行可能なベンチマークで比較します。
 
-## Planned architecture
+## 想定する構成
 
 ```text
 htkr-harness-lab/
-├─ core/                 # shared runtime: models, tools, sessions, telemetry
+├─ core/                 # 共通実行基盤：モデル、ツール、セッション、テレメトリ
 ├─ profiles/
-│  ├─ slides/            # research, evidence, slide AST, HTML/PPTX renderers
-│  └─ coding/            # skills, issue/worktree/review/PR workflow
-├─ ssot/                 # small set of durable authoritative documents
-├─ changes/              # agent-editable change proposals
+│  ├─ slides/            # 調査、根拠、スライドAST、HTML/PPTXレンダラー
+│  └─ coding/            # スキル、Issue・worktree・レビュー・PRの処理
+├─ ssot/                 # 長期的に有効な正本の文書
+├─ changes/              # エージェントが編集できる変更提案
 ├─ docs/
-│  └─ adr/               # durable architecture decisions
+│  └─ adr/               # 長期的なアーキテクチャ上の決定
 ├─ tests/
 ├─ benchmarks/
-├─ .local/               # LOCAL ONLY: proprietary templates/config/data (ignored)
-└─ artifacts/            # generated local outputs (ignored)
+├─ .local/               # ローカル専用：独自テンプレート・設定・データ（Git管理対象外）
+└─ artifacts/            # ローカルの生成物（Git管理対象外）
 ```
 
-This is the intended shape, not a commitment to pre-create every directory. The repository should stay sparse until the foundation spike selects the base harness.
+これは想定構成であり、すべてのディレクトリを先に作るという意味ではありません。基盤ハーネスを比較検証で選ぶまでは、リポジトリを小さく保ちます。
 
-## Slides profile
+## スライドプロファイル
 
-Target workflow:
+目標とする流れ：
 
 ```text
-request
-  -> story / research questions
-  -> parallel web research
-  -> evidence pack
-  -> semantic slide AST
-  -> HTML/CSS prototype
-  -> visual checks
-  -> explicit user approval
-  -> editable PPTX using a local template
-  -> PPTX render/validation
+依頼
+  → ストーリー・調査項目
+  → 並列のウェブ調査
+  → 根拠資料
+  → 意味構造を表すスライドAST
+  → HTML/CSS試作
+  → 見た目の検証
+  → 利用者の明示的な承認
+  → ローカルテンプレートを使った編集可能なPPTX
+  → PPTXのレンダリング・検証
 ```
 
-The HTML prototype and PPTX should be rendered from the **same semantic slide representation**. HTML is a fast review surface; it is not the final source of truth for PowerPoint structure.
+HTML試作とPPTXは**同じ意味構造のスライド表現**から生成します。HTMLは迅速に確認するための画面であり、PowerPointの構造についての最終的な正本ではありません。
 
-Real company templates must be supplied from an ignored local path, for example:
+実際の会社のテンプレートは、たとえば次のようなGit管理対象外のローカルパスから渡します。
 
 ```text
 .local/templates/company-template.pptx
 ```
 
-Only synthetic/open fixtures may be committed.
+コミットできるのは、架空のデータまたは公開可能な素材を使ったテスト用データだけです。
 
-## Coding profile
+## コーディングプロファイル
 
-Target workflow:
+目標とする流れ：
 
 ```text
-request / GitHub issue
-  -> requirement interrogation / repository wayfinding
-  -> change proposal or lightweight spec when needed
-  -> isolated branch + worktree
-  -> implementation
-  -> tests / verification
-  -> independent fresh-context review
-  -> PR
-  -> human or policy-controlled merge
+依頼・GitHub Issue
+  → 要件の確認・リポジトリの把握
+  → 必要に応じて変更提案または簡潔な仕様
+  → 分離したブランチとworktree
+  → 実装
+  → テスト・検証
+  → 独立した新しいコンテキストでのレビュー
+  → PR
+  → 人またはポリシーが管理するマージ
 ```
 
-The initial plan is to reuse the useful ideas from **Matt Pocock skills** and **pstack** without importing unnecessary framework-specific orchestration. Small composable skills are preferred over a monolithic agent mode.
+当初は **Matt Pocock skills** と **pstack** の有用な考え方を再利用し、不要なフレームワーク固有のオーケストレーションは取り込みません。単一の巨大なエージェントモードより、小さく組み合わせ可能なスキルを優先します。
 
-## SSOT and protected paths
+## SSOTと保護対象のパス
 
-The current hypothesis is simpler than implementing a custom protected-path security layer inside the harness:
+現在の仮説は、ハーネス内に独自の保護パス用セキュリティ層を作るより単純です。
 
 ```text
 ssot/
-├─ constitution/         # highest-authority invariants
-├─ architecture/         # architecture / ADR-linked authority
-└─ product/              # durable product requirements
+├─ constitution/         # 最上位の不変条件
+├─ architecture/         # アーキテクチャとADRに関する正本
+└─ product/              # 長期的な製品要件
 
-changes/                 # proposals and implementation planning
+changes/                 # 提案と実装計画
 ```
 
-For protected paths, the harness should detect intent and route the change through a branch/PR, but the **actual enforcement belongs to GitHub** using CODEOWNERS plus branch protection/rulesets. This keeps the local harness from becoming its own security boundary.
+保護対象のパスへの変更をハーネスが検知したら、ブランチとPRを経由させます。ただし、**実際の強制はGitHub側**でCODEOWNERSとブランチ保護・ルールセットを使って行います。これにより、ローカルのハーネス自体をセキュリティ境界として扱わずに済みます。
 
-OpenSpec is a candidate for complex change transactions, but it is not assumed to be mandatory for every change. A lightweight `changes/<id>/` convention should be evaluated first.
+OpenSpecは複雑な変更作業の候補ですが、すべての変更に必須とはしません。まずは簡潔な `changes/<id>/` の規約を評価します。
 
-## Local setup and secrets
+## ローカルのセットアップと秘密情報
 
-The implementation is not bootstrapped yet. Until Issue #1 selects the base harness, there is intentionally no fake install command.
+実装の土台はまだ用意されていません。Issue #1 で基盤ハーネスを選ぶまでは、実際には使えないインストールコマンドを記載しません。
 
-When local development begins:
+ローカル開発を始める際は、次を守ってください。
 
-- keep API keys in environment variables or an ignored local secret file;
-- keep proprietary templates/data under `.local/` or another ignored path;
-- keep generated decks, logs and run outputs under `artifacts/`;
-- never paste secrets or proprietary source material into GitHub Issues or committed fixtures.
+- APIキーは環境変数またはGit管理対象外のローカル秘密情報ファイルに保存する。
+- 独自テンプレートやデータは `.local/` などのGit管理対象外の場所に保存する。
+- 生成した資料、ログ、実行結果は `artifacts/` に保存する。
+- 秘密情報や独自の資料をGitHub Issueやコミットするテスト用データに貼り付けない。
 
-Typical provider variables will likely include names such as:
+使用するプロバイダーの環境変数名には、次のものが含まれる見込みです。
 
 ```text
 ANTHROPIC_API_KEY=...
 OPENAI_API_KEY=...
 ```
 
-Do **not** commit real values. A safe `.env.example` may be added later when the runtime configuration is finalized.
+実際の値は**コミットしないでください**。実行時の設定が確定したら、安全な `.env.example` を追加する場合があります。
 
-## Roadmap
+## 作業計画
 
-The work is tracked in GitHub Issues. The first milestones are:
+作業はGitHub Issueで管理します。最初の節目は次のとおりです。
 
-1. Compare Pi vs DeepSeek Harness on the same slides/coding mini-benchmarks.
-2. Build the shared Claude/OpenAI runtime.
-3. Implement slides research/evidence and HTML approval flow.
-4. Implement editable PPTX generation using a local template.
-5. Compose Matt Pocock/pstack-inspired coding skills.
-6. Validate minimal SSOT governance and GitHub-enforced protected paths.
-7. Automate Issue -> worktree -> independent review -> PR.
-8. Add repeatable harness evaluations.
+1. 同じスライド・コーディングの小規模ベンチマークでPiとDeepSeek Harnessを比較する。
+2. Claude/OpenAI共通の実行基盤を作る。
+3. スライドの調査・根拠整理とHTML承認フローを実装する。
+4. ローカルテンプレートを使って編集可能なPPTXを生成する。
+5. Matt Pocockとpstackを参考にコーディングスキルを組み合わせる。
+6. 最小限のSSOT管理とGitHubで強制する保護対象パスを検証する。
+7. Issue → worktree → 独立レビュー → PRを自動化する。
+8. 再実行可能なハーネス評価を追加する。
 
-## Public-repository safety
+## 公開リポジトリでの情報管理
 
-Before `git add` or `git push`, check for:
+`git add` または `git push` の前に、次が含まれていないか確認してください。
 
-- `.env` files and API keys/tokens;
-- internal hostnames, repository URLs or ticket IDs;
-- proprietary `.pptx`, `.pdf`, screenshots or brand assets;
-- customer/company data in prompts, fixtures, logs or benchmark outputs;
-- local run/session state that may contain prompt or source text.
+- `.env` ファイルやAPIキー・トークン
+- 社内ホスト名、リポジトリURL、チケットID
+- 独自の `.pptx`、`.pdf`、スクリーンショット、ブランド素材
+- プロンプト、テスト用データ、ログ、ベンチマーク結果に含まれる顧客・会社のデータ
+- プロンプトや元資料を含む可能性があるローカルの実行・セッション状態
 
-If a secret is ever committed, removing the file in a later commit is not sufficient: rotate/revoke the secret first, then clean repository history as appropriate.
+秘密情報を誤ってコミットした場合、後続のコミットでファイルを削除するだけでは不十分です。まず秘密情報をローテーションまたは無効化し、必要に応じてGitの履歴を整理してください。
 
-## Third-party code and licenses
+## 外部コードとライセンス
 
-The root `LICENSE` covers original code in this repository. External harnesses, skills and libraries keep their own licenses and notices.
+ルートの `LICENSE` は、このリポジトリで作成したオリジナルのコードに適用されます。外部のハーネス、スキル、ライブラリには、それぞれのライセンスと告知が適用されます。
 
-Before vendoring or copying third-party source/skill content:
+外部のソースコードやスキルを取り込む前に、次を行います。
 
-1. record the upstream project and exact version/commit;
-2. verify license compatibility;
-3. preserve required copyright/license notices;
-4. prefer dependency/reference/reimplementation over copying when practical.
+1. 元プロジェクトと正確なバージョン・コミットを記録する。
+2. ライセンスの互換性を確認する。
+3. 必要な著作権表示・ライセンス表示を保持する。
+4. 実用的であればコピーより依存関係・参照・再実装を優先する。
 
-A third-party notices/provenance file will be added before source code is vendored.
+外部ソースコードを取り込む前に、告知と出自を記録するファイルを整備します。
 
-## Status
+## 現状
 
-**Experimental / pre-foundation.** The repository currently contains architecture decisions and implementation issues, not a stable harness API.
+**実験段階・基盤選定前です。** 現在のリポジトリにはアーキテクチャ上の決定事項と実装Issueがあり、安定したハーネスAPIはありません。
 
-## License
+## ライセンス
 
-Original code in this repository is licensed under the [MIT License](LICENSE), unless a file or third-party component states otherwise.
+ファイルや外部コンポーネントに別段の記載がない限り、このリポジトリのオリジナルのコードは[MITライセンス](LICENSE)で提供します。
